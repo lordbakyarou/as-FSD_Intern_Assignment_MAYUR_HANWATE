@@ -54,7 +54,7 @@ const LoginPage = () => {
       getAllTodo();
       navigate("/dashboard");
     } catch (error) {
-      setUserCreationError(error.response.data);
+      setUserCreationError(error.response);
       setIsLoading(false);
       console.log(error);
     }
