@@ -23,9 +23,11 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    async function checkIfUserLogin() {
+    function checkIfUserLogin() {
       try {
-        await axios.get(`${URL}/auth/check`, { withCredentials: true });
+        setTimeout(async () => {
+          await axios.get(`${URL}/auth/check`, { withCredentials: true });
+        }, 2000);
       } catch (error) {
         console.log(error);
         navigate("/");
@@ -35,7 +37,7 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div className="flex justify-center gap-20 mt-10 w-full ">
+    <div className="flex justify-center gap-20 mt-20 w-full ">
       <Status
         title="Pending"
         column="pending"

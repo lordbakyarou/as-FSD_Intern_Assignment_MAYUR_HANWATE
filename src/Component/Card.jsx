@@ -68,8 +68,8 @@ const Card = ({
         layoutId={id}
         onDragStart={(e) => handleDragStart(e, { title, id, column })}
       >
-        <div class="border-b-2 border-neutral-100 px-6 py-3 dark:border-white/10 flex items-center justify-between">
-          <h5 class="mb-2 text-xl font-medium leading-tight">{title}</h5>
+        <div class="border-b-2 border-neutral-100 px-2  py-3 dark:border-white/10 flex items-center justify-between">
+          <h5 class="mb-2 text-xl font-medium leading-tight w-56">{title}</h5>
           <MdEdit
             className="hover:text-gray-500"
             onClick={() => setOpenTask(true)}

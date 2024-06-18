@@ -209,8 +209,8 @@ const Status = ({
       <div
         className={`flex items-center justify-between bg-white rounded-t-md border-t-4 ${borderColor}`}
       >
-        <div className="flex w-full justify-between items-center gap-2">
-          <div className="flex gap-2">
+        <div className="flex w-full p-2 justify-between items-center gap-2 border">
+          <div className="flex gap-2 ">
             <h3 className={`font-medium ${headingColor}`}>{title}</h3>
             <span className="rounded text-sm text-gray-800 border px-1 border-2 flex items-center">
               {filterdColumns.length}

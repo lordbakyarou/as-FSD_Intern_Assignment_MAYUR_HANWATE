@@ -59,7 +59,7 @@ const SignupPage = () => {
       );
 
       setIsLoading(false);
-      navigate("/login");
+      navigate("/");
     } catch (error) {
       console.log(error);
       setUserCreationError(error.response.data);

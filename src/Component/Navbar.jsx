@@ -15,7 +15,7 @@ const Navbar = () => {
   // const dispatch = useDispatch();
 
   return (
-    <nav class="fixed top-0 bg-black/30 backdrop-blur-2xl z-50 w-full">
+    <nav class="fixed top-0 bg-white mb-20 backdrop-blur-2xl z-50 w-full border">
       <div class="px-3 py-3 lg:px-5 lg:pl-3 ">
         <div class="flex items-center justify-between">
           <div class="flex items-center justify-start rtl:justify-end">
@@ -49,12 +49,7 @@ const Navbar = () => {
               className="flex ms-2 items-center  md:me-24"
             >
               <span class="self-center text-xl font-semibold sm:text-2xl  cursor-pointer whitespace-nowrap dark:text-white">
-                <img
-                  src={
-                    "https://upliance.ai/cdn/shop/files/purple_upliance.png?height=42&v=1705328918"
-                  }
-                  className="w-36"
-                />
+                KONVOY
               </span>
             </NavLink>
           </div>
@@ -121,11 +116,7 @@ const Navbar = () => {
                       <NavLink
                         to="/"
                         className="block px-4 py-2 text-sm hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                        onClick={() => {
-                          // dispatch(clearToken());
-                          // dispatch(clearCounter());
-                          // dispatch(clearUser());
-                        }}
+                        onClick={() => {}}
                       >
                         Logout
                       </NavLink>

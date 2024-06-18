@@ -12,7 +12,7 @@ import Navbar from "./Component/Navbar";
 
 const WrapComponent = ({ children }) => {
   return (
-    <div className="w-screen h-full bg-gray-900 p-5 flex justify-center">
+    <div className="w-screen h-full flex-col justify-center">
       <Navbar />
       {children}
     </div>
