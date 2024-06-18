@@ -23,11 +23,9 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    function checkIfUserLogin() {
+    async function checkIfUserLogin() {
       try {
-        setTimeout(async () => {
-          await axios.get(`${URL}/auth/check`, { withCredentials: true });
-        }, 2000);
+        await axios.get(`${URL}/auth/check`, { withCredentials: true });
       } catch (error) {
         console.log(error);
         navigate("/");
