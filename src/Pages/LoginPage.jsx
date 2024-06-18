@@ -51,7 +51,7 @@ const LoginPage = () => {
       );
 
       setIsLoading(false);
-      getAllTodo();
+      await getAllTodo();
       navigate("/dashboard");
     } catch (error) {
       setUserCreationError(error.response);

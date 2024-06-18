@@ -41,6 +41,7 @@ const Status = ({
   console.log(filterdColumns, "This is filtered collums");
 
   const [openTask, setOpenTask] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [text, setText] = useState("");
   const dispatch = useDispatch();
