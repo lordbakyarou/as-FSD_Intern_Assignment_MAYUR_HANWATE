@@ -3,16 +3,19 @@ import React from "react";
 //React Router Dom
 import { NavLink } from "react-router-dom";
 
-//Redux Toolkit
-// import { clearToken } from "../redux/features/tokenSlice";
-// import { clearCounter } from "../redux/features/counterSlice";
-// import { clearUser } from "../redux/features/userSlice";
+import { useNavigate } from "react-router-dom";
+
 import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
+
+const URL = import.meta.env.VITE_API_URL;
 
 const Navbar = () => {
   // const user = useSelector((state) => state.user);
   // //   console.log(user);
   // const dispatch = useDispatch();
+
+  const navigate = useNavigate();
 
   return (
     <nav class="fixed top-0 bg-white mb-20 backdrop-blur-2xl z-50 w-full border">
@@ -116,7 +119,12 @@ const Navbar = () => {
                       <NavLink
                         to="/"
                         className="block px-4 py-2 text-sm hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                        onClick={() => {}}
+                        onClick={async () => {
+                          await axios.get(`${URL}/auth/logout`, {
+                            withCredentials: true,
+                          });
+                          navigate("/");
+                        }}
                       >
                         Logout
                       </NavLink>

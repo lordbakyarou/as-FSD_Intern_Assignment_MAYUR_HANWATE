@@ -49,6 +49,7 @@ const LoginPage = () => {
         },
         { withCredentials: true }
       );
+      console.log(loggedInUser);
 
       setIsLoading(false);
       await getAllTodo();
