@@ -15,6 +15,8 @@ const URL = import.meta.env.VITE_API_URL;
 
 const AddTask = ({ status, openTask, setOpenTask }) => {
   const dispatch = useDispatch();
+  const userData = useSelector((state) => state.user);
+
   // console.log(status);
 
   const [task, setTask] = useState({
@@ -62,19 +64,20 @@ const AddTask = ({ status, openTask, setOpenTask }) => {
       id: todo.data._id,
       column: todo.data.todoStatus,
     };
+
     const insertAtIndex = -1;
 
     if (task.status == "pending")
-      dispatch(createPendingTask({ cardToTransfer, insertAtIndex }));
+      dispatch(createPendingTask({ todo: todo.data, insertAtIndex }));
 
     if (task.status == "inProgress")
-      dispatch(createInProgressTask({ cardToTransfer, insertAtIndex }));
+      dispatch(createInProgressTask({ todo: todo.data, insertAtIndex }));
 
     if (task.status == "completed")
-      dispatch(createCompletedTask({ cardToTransfer, insertAtIndex }));
+      dispatch(createCompletedTask({ todo: todo.data, insertAtIndex }));
 
     if (task.status == "deferred")
-      dispatch(createDeferredTask({ cardToTransfer, insertAtIndex }));
+      dispatch(createDeferredTask({ todo: todo.data, insertAtIndex }));
 
     setOpenTask(false);
   }
@@ -100,9 +103,6 @@ const AddTask = ({ status, openTask, setOpenTask }) => {
             name="title"
             onChange={taskInput}
           />
-          {/* <p className="text-red-500 text-xs italic">
-            Please fill out this field.
-          </p> */}
         </div>
         <div className="w-full px-3">
           <label
@@ -131,7 +131,7 @@ const AddTask = ({ status, openTask, setOpenTask }) => {
             className="appearance-none block w-full bg-gray-200 text-gray-700 border  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
             id="grid-first-name"
             type="text"
-            placeholder="User Name"
+            placeholder={userData.name}
             name="assignee"
             onChange={taskInput}
             disabled={true}

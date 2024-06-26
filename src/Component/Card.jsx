@@ -8,15 +8,9 @@ import { CgDetailsMore } from "react-icons/cg";
 import { useEffect, useState } from "react";
 import AddTask from "./AddTask";
 import EditTask from "./EditTask";
+import formatDate from "@/utils/convertDate";
 
-const Card = ({
-  title,
-  id,
-  description,
-  column,
-  priority,
-  handleDragStart,
-}) => {
+const Card = ({ item, handleDragStart }) => {
   const [duration, setDuration] = useState(0);
   const [timer, setTimer] = useState(null);
   const [showActions, setShowActions] = useState(true);
@@ -60,16 +54,22 @@ const Card = ({
 
   return (
     <>
-      <Indicator before={id} column={column} />
+      <Indicator before={item._id} column={item.todoStatus} />
       <motion.div
-        class="block rounded-lg bg-white shadow-secondary-1 dark:bg-surface-dark dark:text-white text-surface"
+        class="block rounded-lg bg-white shadow-secondary-1 dark:bg-surface-dark dark:text-white text-surface shadow-lg"
         draggable
         layout
-        layoutId={id}
-        onDragStart={(e) => handleDragStart(e, { title, id, column })}
+        layoutId={item._id}
+        onDragStart={(e) =>
+          handleDragStart(e, {
+            item,
+          })
+        }
       >
         <div class="border-b-2 border-neutral-100 px-2  py-3 dark:border-white/10 flex items-center justify-between">
-          <h5 class="mb-2 text-xl font-medium leading-tight w-56">{title}</h5>
+          <h5 class="mb-2 text-xl font-medium leading-tight w-56">
+            {item.todoName}
+          </h5>
           <MdEdit
             className="hover:text-gray-500"
             onClick={() => setOpenTask(true)}
@@ -77,7 +77,7 @@ const Card = ({
         </div>
 
         <div class="p-6 flex flex-col gap-2">
-          <p class="mb-4 text-base">{description}</p>
+          <p class="mb-4 text-base">{item.todoDescription}</p>
           <div className="text-xs font-semibold flex justify-between">
             <div className="">
               {" "}
@@ -85,16 +85,18 @@ const Card = ({
               <span className=" text-blue-400">{formatDuration(duration)}</span>
             </div>
             <div
-              className={`${priority === "Low" ? "text-gray-500" : ""} ${
-                priority === "Medium" ? "text-yellow-500" : ""
-              } ${priority === "High" ? "text-red-500" : ""}`}
+              className={`${
+                item.todoPriority === "Low" ? "text-gray-500" : ""
+              } ${item.todoPriority === "Medium" ? "text-yellow-500" : ""} ${
+                item.todoPriority === "High" ? "text-red-500" : ""
+              }`}
             >
-              {priority}
+              {item.todoPriority}
             </div>
           </div>
           <div className="flex justify-between">
             <div className="border rounded-full text-xs w-fit px-2 bg-gray-100 flex items-center justify-center font-semibold text-gray-500">
-              24 Aug 2022
+              {formatDate(item.createdAt)}
             </div>
             <div className="flex gap-1 items-center">
               {showActions ? (
@@ -134,12 +136,8 @@ const Card = ({
                 className="bg-white p-10 rounded-xl shadow-md"
               >
                 <EditTask
-                  status={column}
-                  id={id}
+                  item={item}
                   openTask={openTask}
-                  title={title}
-                  description={description}
-                  priority={priority}
                   setOpenTask={setOpenTask}
                 />
               </div>

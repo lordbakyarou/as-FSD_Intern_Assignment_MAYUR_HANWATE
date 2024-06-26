@@ -35,7 +35,7 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div className="flex justify-center gap-20 mt-20 w-full ">
+    <div className="flex justify-evenly gap-2 mt-20 w-full ">
       <Status
         title="Pending"
         column="pending"
@@ -55,6 +55,7 @@ const Dashboard = () => {
         cards={cards.inProgress}
         // setCards={setCards}
       />
+
       <Status
         title="Completed"
         column="completed"

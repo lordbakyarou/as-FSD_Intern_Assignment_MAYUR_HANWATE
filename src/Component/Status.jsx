@@ -37,8 +37,10 @@ const Status = ({
 }) => {
   const [active, setActive] = useState(false);
 
-  const filterdColumns = cards.filter((item) => item.column == column);
-  console.log(filterdColumns, "This is filtered collums");
+  // console.log(cards, "This is filtered collums");
+
+  const filterdColumns = cards.filter((item) => item?.todoStatus == column);
+  // console.log(filterdColumns, "This is filtered collums");
 
   const [openTask, setOpenTask] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -46,14 +48,15 @@ const Status = ({
   const [text, setText] = useState("");
   const dispatch = useDispatch();
   const currentColumnData = useSelector((state) => state.task);
-  console.log(currentColumnData, "current state");
+  // console.log(currentColumnData, "current state");
   const openCreateTask = useSelector((state) => state.openCreateTask);
 
   const handleDragStart = (e, card) => {
-    e.dataTransfer.setData("cardId", card.id);
-    e.dataTransfer.setData("column", column);
+    e.dataTransfer.setData("cardId", card.item._id);
+    e.dataTransfer.setData("column", card.item.todoStatus);
+    console.log(card.item, "this is card todoStatus");
 
-    console.log(card.id);
+    // console.log(card.id);
   };
 
   const handleDragOver = (e) => {
@@ -83,36 +86,44 @@ const Status = ({
 
       // const stateData = useSelector((state) => state[column]);
 
+      console.log(
+        "currentColumsData",
+        currentColumnData,
+        previousColumn,
+        "this is previous colums"
+      );
+
       let cardToTransfer = currentColumnData[previousColumn].find(
-        (c) => c.id === cardId
+        (c) => c._id === cardId
       );
       // console.log(cardToTransfer, copy, "inside data");
 
       if (!cardToTransfer) return;
-      cardToTransfer = { ...cardToTransfer, column };
+      cardToTransfer = { ...cardToTransfer, todoStatus: column };
       // console.log(column);
 
-      copy = copy.filter((c) => c.id !== cardId);
+      console.log(copy, cardId);
+      copy = copy.filter((c) => c?._id !== cardId);
 
       const moveToBack = before === "-1";
-      console.log(moveToBack, before);
+      // console.log(moveToBack, before);
       let insertAtIndex = copy.length;
 
       if (moveToBack) {
         copy.push(cardToTransfer);
       } else {
-        insertAtIndex = copy.findIndex((el) => el.id === before);
+        insertAtIndex = copy.findIndex((el) => el?._id === before);
         if (insertAtIndex === undefined) return;
       }
 
-      console.log(previousColumn, column, cardToTransfer, copy, insertAtIndex);
+      // console.log(previousColumn, column, cardToTransfer, copy, insertAtIndex);
 
       async function editTodo() {
         try {
           const editedTodo = await axios.post(
             `${URL}/todo/editTodo`,
             {
-              todoId: cardToTransfer.id,
+              todoId: cardToTransfer._id,
               updatedTodo: {
                 todoStatus: column,
               },
@@ -122,7 +133,7 @@ const Status = ({
             }
           );
 
-          console.log("This is edited Todo", editedTodo);
+          // console.log("This is edited Todo", editedTodo);
         } catch (error) {
           console.log(error);
         }
@@ -146,19 +157,16 @@ const Status = ({
         dispatch(removeDeferredTask(cardToTransfer));
 
       if (column == "pending")
-        dispatch(createPendingTask({ cardToTransfer, insertAtIndex }));
+        dispatch(createPendingTask({ todo: cardToTransfer, insertAtIndex }));
 
       if (column == "inProgress")
-        dispatch(createInProgressTask({ cardToTransfer, insertAtIndex }));
+        dispatch(createInProgressTask({ todo: cardToTransfer, insertAtIndex }));
 
       if (column == "completed")
-        dispatch(createCompletedTask({ cardToTransfer, insertAtIndex }));
-
-      if (column == "deployed")
-        dispatch(createDeployedTask({ cardToTransfer, insertAtIndex }));
+        dispatch(createCompletedTask({ todo: cardToTransfer, insertAtIndex }));
 
       if (column == "deferred")
-        dispatch(createDeferredTask({ cardToTransfer, insertAtIndex }));
+        dispatch(createDeferredTask({ todo: cardToTransfer, insertAtIndex }));
     }
   };
 
@@ -210,7 +218,7 @@ const Status = ({
       <div
         className={`flex items-center justify-between bg-white rounded-t-md border-t-4 ${borderColor}`}
       >
-        <div className="flex w-full p-2 justify-between items-center gap-2 border">
+        <div className="flex w-full p-2 shadow justify-between items-center gap-2 border">
           <div className="flex gap-2 ">
             <h3 className={`font-medium ${headingColor}`}>{title}</h3>
             <span className="rounded text-sm text-gray-800 border px-1 border-2 flex items-center">
@@ -222,7 +230,7 @@ const Status = ({
             onClick={() => setOpenTask(!openTask)}
             className=""
           >
-            {!openCreateTask ? <FiPlusCircle /> : <MdOutlineCancel />}
+            <FiPlusCircle className="hover:text-black text-gray-500" />
           </motion.button>
         </div>
       </div>
@@ -234,9 +242,9 @@ const Status = ({
           active ? `${backgroundColor} opacity-50` : ``
         }`}
       >
-        {console.log(filterdColumns, "askfdjlaksjfd")}
+        {/* {console.log(filterdColumns, "askfdjlaksjfd")} */}
         {filterdColumns.map((item, index) => (
-          <Card key={item.id} {...item} handleDragStart={handleDragStart} />
+          <Card key={item._id} item={item} handleDragStart={handleDragStart} />
         ))}
         <Indicator before="-1" column={column} />
         {openTask && (

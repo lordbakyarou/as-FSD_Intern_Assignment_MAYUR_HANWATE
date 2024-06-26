@@ -8,29 +8,27 @@ import {
   createCompletedTask,
   createDeferredTask,
   editTask,
+  removePendingTask,
+  removeInProgressTask,
+  removeCompletedTask,
+  removeDeployedTask,
+  removeDeferredTask,
 } from "../redux/features/taskSlice/taskSlice";
 
 import axios from "axios";
 
 const URL = import.meta.env.VITE_API_URL;
 
-const EditTask = ({
-  status,
-  title,
-  description,
-  priority,
-  openTask,
-  id,
-  setOpenTask,
-}) => {
+const EditTask = ({ item, openTask, setOpenTask }) => {
   const dispatch = useDispatch();
+  const userData = useSelector((state) => state.user);
   // console.log(status);
 
   const [task, setTask] = useState({
-    title: title,
-    description: description,
-    priority: priority,
-    status: status,
+    title: item.todoName,
+    description: item.todoDescription,
+    priority: item.todoPriority,
+    status: item.todoStatus,
   });
 
   function taskInput(e) {
@@ -39,7 +37,6 @@ const EditTask = ({
 
   async function createNewTask(e) {
     e.preventDefault();
-    //   dispatch;
 
     let todo;
 
@@ -47,18 +44,53 @@ const EditTask = ({
       todo = await axios.post(
         `${URL}/todo/editTodo`,
         {
-          todoId: id,
+          todoId: item._id,
           updatedTodo: {
             todoName: task.title,
             todoDescription: task.description,
-            todoStatus: status,
+            todoStatus: task.status,
             todoPriority: task.priority,
             todoCurrentAction: "Pause",
           },
         },
         { withCredentials: true }
       );
-      console.log("Updated todo", todo);
+
+      const insertAtIndex = 0;
+
+      console.log(item.todoStatus, todo.data.message, task.status);
+
+      if (item.todoStatus == "pending")
+        dispatch(removePendingTask(todo.data.message));
+
+      if (item.todoStatus == "inProgress")
+        dispatch(removeInProgressTask(todo.data.message));
+
+      if (item.todoStatus == "completed")
+        dispatch(removeCompletedTask(todo.data.message));
+
+      if (item.todoStatus == "deferred")
+        dispatch(removeDeferredTask(todo.data.message));
+
+      if (task.status == "pending")
+        dispatch(createPendingTask({ todo: todo.data.message, insertAtIndex }));
+
+      if (task.status == "inProgress")
+        dispatch(
+          createInProgressTask({ todo: todo.data.message, insertAtIndex })
+        );
+
+      if (task.status == "completed")
+        dispatch(
+          createCompletedTask({ todo: todo.data.message, insertAtIndex })
+        );
+
+      if (task.status == "deferred")
+        dispatch(
+          createDeferredTask({ todo: todo.data.message, insertAtIndex })
+        );
+
+      console.log("Updated todo", todo.data.message);
     } catch (error) {
       console.log(error);
     }
@@ -72,7 +104,7 @@ const EditTask = ({
       column: todo.data.message.todoStatus,
     };
 
-    dispatch(editTask({ id, cardToEdit }));
+    dispatch(editTask({ id: item._id, cardToEdit }));
 
     setOpenTask(false);
   }
@@ -98,9 +130,6 @@ const EditTask = ({
             name="title"
             onChange={taskInput}
           />
-          {/* <p className="text-red-500 text-xs italic">
-            Please fill out this field.
-          </p> */}
         </div>
         <div className="w-full px-3">
           <label
@@ -129,7 +158,7 @@ const EditTask = ({
             className="appearance-none block w-full bg-gray-200 text-gray-700 border  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
             id="grid-first-name"
             type="text"
-            placeholder="User Name"
+            placeholder={userData.name}
             name="assignee"
             onChange={taskInput}
             disabled={true}

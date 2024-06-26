@@ -8,11 +8,13 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 
+import logo from "../assets/logo.png";
+
 const URL = import.meta.env.VITE_API_URL;
 
 const Navbar = () => {
-  // const user = useSelector((state) => state.user);
-  // //   console.log(user);
+  const user = useSelector((state) => state.user);
+  console.log(user, "user");
   // const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -52,7 +54,7 @@ const Navbar = () => {
               className="flex ms-2 items-center  md:me-24"
             >
               <span class="self-center text-xl font-semibold sm:text-2xl  cursor-pointer whitespace-nowrap dark:text-white">
-                KONVOY
+                <img src={logo} className="w-40" />
               </span>
             </NavLink>
           </div>
@@ -96,16 +98,16 @@ const Navbar = () => {
                 <div className="bg-white rounded">
                   <div class="px-4 py-3" role="none">
                     <p class="text-sm  dark:text-white" role="none">
-                      {/* {user.displayName} */}
+                      {user.name}
                     </p>
                     <p
                       class="text-sm font-medium  truncate dark:text-gray-300"
                       role="none"
                     >
-                      {/* {user.email} */}
+                      {user.email}
                     </p>
                   </div>
-
+                  <hr />
                   <ul class="py-1" role="none">
                     <li>
                       <NavLink

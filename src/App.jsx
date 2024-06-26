@@ -9,12 +9,13 @@ import SignupPage from "./Pages/SignupPage";
 import Dashboard from "./Pages/Dashboard";
 
 import Navbar from "./Component/Navbar";
-
+import Sidebar from "./Component/Sidebar";
 const WrapComponent = ({ children }) => {
   return (
-    <div className="w-screen h-full flex-col justify-center">
+    <div className="">
       <Navbar />
       {children}
+      <Sidebar />
     </div>
   );
 };
@@ -30,7 +31,9 @@ function App() {
           path="/dashboard"
           element={
             <WrapComponent>
-              <Dashboard />
+              <div className="p-4 sm:ml-64 min-h-screen bg-gray-100">
+                <Dashboard />
+              </div>
             </WrapComponent>
           }
         />

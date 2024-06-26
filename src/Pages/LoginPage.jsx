@@ -15,6 +15,7 @@ import {
   createPendingTask,
 } from "../redux/features/taskSlice/taskSlice";
 import { useDispatch } from "react-redux";
+import { addUserData } from "../redux/features/userSlice/userSlice";
 
 const URL = import.meta.env.VITE_API_URL;
 
@@ -49,8 +50,10 @@ const LoginPage = () => {
         },
         { withCredentials: true }
       );
-      console.log(loggedInUser);
 
+      // console.log(loggedInUser, "userData");
+
+      await dispatch(addUserData({ user: loggedInUser.data }));
       setIsLoading(false);
       await getAllTodo();
       navigate("/dashboard");
@@ -68,31 +71,41 @@ const LoginPage = () => {
       const allUserTodo = await axios.get(`${URL}/todo/getAllTodo`, {
         withCredentials: true,
       });
-      console.log("This is all users data", allUserTodo.data);
 
       const insertAtIndex = -1;
 
       allUserTodo.data.map((todo) => {
-        const cardToTransfer = {
-          title: todo.todoName,
-          description: todo.todoDescription,
-          assignee: "Mayur", //pass here  the user name
-          priority: todo.todoPriority,
-          id: todo._id,
-          column: todo.todoStatus,
-        };
-
         if (todo.todoStatus == "pending")
-          dispatch(createPendingTask({ cardToTransfer, insertAtIndex }));
+          dispatch(
+            createPendingTask({
+              todo: todo,
+              insertAtIndex,
+            })
+          );
 
         if (todo.todoStatus == "inProgress")
-          dispatch(createInProgressTask({ cardToTransfer, insertAtIndex }));
+          dispatch(
+            createInProgressTask({
+              todo: todo,
+              insertAtIndex,
+            })
+          );
 
         if (todo.todoStatus == "completed")
-          dispatch(createCompletedTask({ cardToTransfer, insertAtIndex }));
+          dispatch(
+            createCompletedTask({
+              todo: todo,
+              insertAtIndex,
+            })
+          );
 
         if (todo.todoStatus == "deferred")
-          dispatch(createDeferredTask({ cardToTransfer, insertAtIndex }));
+          dispatch(
+            createDeferredTask({
+              todo: todo,
+              insertAtIndex,
+            })
+          );
       });
     } catch (error) {
       console.error("Error fetching tasks:", error);

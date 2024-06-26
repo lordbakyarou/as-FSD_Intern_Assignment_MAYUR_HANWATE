@@ -1,5 +1,5 @@
 import React from "react";
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 
 const initialState = {
   pending: [],
@@ -27,83 +27,57 @@ const taskReducer = createSlice({
       state.openCreateTask = !state.openCreateTask;
     },
     editTask: (state, action) => {
-      const { id, cardToEdit } = action.payload;
-      state.pending = findAndUpdateTask(state.pending, id, cardToEdit);
-      state.inProgress = findAndUpdateTask(state.inProgress, id, cardToEdit);
-      state.completed = findAndUpdateTask(state.completed, id, cardToEdit);
-      state.deployed = findAndUpdateTask(state.deployed, id, cardToEdit);
-      state.deferred = findAndUpdateTask(state.deferred, id, cardToEdit);
+      console.log(action.payload);
+      const { id, todo } = action.payload;
+
+      state.pending = findAndUpdateTask(state.pending, id, todo);
+      state.inProgress = findAndUpdateTask(state.inProgress, id, todo);
+      state.completed = findAndUpdateTask(state.completed, id, todo);
+      state.deployed = findAndUpdateTask(state.deployed, id, todo);
+      state.deferred = findAndUpdateTask(state.deferred, id, todo);
     },
     createPendingTask: (state, action) => {
       let newTask = state.pending;
-      newTask.splice(
-        action.payload.insertAtIndex,
-        0,
-        action.payload.cardToTransfer
-      );
+      newTask.splice(action.payload.insertAtIndex, 0, action.payload.todo);
       state.pending = newTask;
     },
     removePendingTask: (state, action) => {
       state.pending = state.pending.filter(
-        (task) => task.id != action.payload.id
+        (task) => task?._id != action.payload._id
       );
     },
     createInProgressTask: (state, action) => {
       let newTask = [...state.inProgress];
-      console.log(newTask, action.payload, state.inProgress);
-      newTask.splice(
-        action.payload.insertAtIndex,
-        0,
-        action.payload.cardToTransfer
-      );
+      // console.log(newTask, action.payload, state.inProgress);
+      newTask.splice(action.payload.insertAtIndex, 0, action.payload.todo);
       state.inProgress = newTask;
     },
     removeInProgressTask: (state, action) => {
       // console.log(action)
       state.inProgress = state.inProgress.filter(
-        (task) => task.id != action.payload.id
+        (task) => task?._id != action.payload._id
       );
     },
     createCompletedTask: (state, action) => {
       let newTask = state.completed;
-      newTask.splice(
-        action.payload.insertAtIndex,
-        0,
-        action.payload.cardToTransfer
-      );
+      newTask.splice(action.payload.insertAtIndex, 0, action.payload.todo);
       state.completed = newTask;
     },
     removeCompletedTask: (state, action) => {
+      console.log(current(state.completed), action.payload);
       state.completed = state.completed.filter(
-        (task) => task.id != action.payload.id
+        (task) => task?._id != action.payload._id
       );
     },
-    createDeployedTask: (state, action) => {
-      let newTask = state.deployed;
-      newTask.splice(
-        action.payload.insertAtIndex,
-        0,
-        action.payload.cardToTransfer
-      );
-      state.deployed = newTask;
-    },
-    removeDeployedTask: (state, action) => {
-      state.deployed = state.deployed.filter(
-        (task) => task.id != action.payload.id
-      );
-    },
+
     createDeferredTask: (state, action) => {
-      let newTask = state.deferred;
-      newTask.splice(
-        (action.payload.insertAtIndex = state.length),
-        0,
-        action.payload.cardToTransfer
-      );
+      let newTask = state.deployed;
+      newTask.splice(action.payload.insertAtIndex, 0, action.payload.todo);
       state.deferred = newTask;
     },
     removeDeferredTask: (state, action) => {
       state.deferred = state.deferred.filter(
-        (task) => task.id != action.payload.id
+        (task) => task?._id != action.payload._id
       );
     },
     clearAllTask: (state) => {
