@@ -2,13 +2,6 @@ import React, { useEffect, useState } from "react";
 import Status from "../Component/Status";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import {
-  clearAllTask,
-  createCompletedTask,
-  createDeferredTask,
-  createInProgressTask,
-  createPendingTask,
-} from "../redux/features/taskSlice/taskSlice";
 
 import { useNavigate } from "react-router-dom";
 
